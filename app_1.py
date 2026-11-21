@@ -72,6 +72,9 @@ if st.session_state.df is not None:
     for msg in st.session_state.messages:
         with st.chat_message(msg["role"]):
             st.markdown(msg["content"])
+            # Re-display any saved figures
+            if 'figure' in msg:
+                st.pyplot(msg['figure'])
     
     # Chat input
     user_input = st.chat_input("Ask a question about your data")
@@ -177,7 +180,17 @@ if st.session_state.df is not None:
                                 fig = plt.gcf()
                                 if fig.get_axes():
                                     st.pyplot(fig)
-                                
+                                    # Save figure in message for persistence
+                                    st.session_state.messages.append({
+                                        'role': 'assistant',
+                                        'content': reply,
+                                        'figure': fig
+                                    })
+                                else:
+                                    st.session_state.message.append({ #without figure, just display texts
+                                        'role': 'assistant',
+                                        'content': reply
+                                    })
                                 plt.close()
                                 
                             except Exception as e:
