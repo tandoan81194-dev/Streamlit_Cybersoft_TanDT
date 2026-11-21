@@ -135,14 +135,19 @@ if st.session_state.df is not None:
             message_placeholder = st.empty()
             with st.spinner("Analyzing your data..."):
                 try:
+                    # Get conversation history context:
+                    messages = [{'role': 'system', 'content': system_prompt}]
+                    #include last 3 exchanges for context:
+                    for msg in st.session_state.messages[-6:]:
+                        messages.append({'role': msg['role'], 'content': msg['content']})
+
+                    messages.append({'role': 'user', 'content': user_input})
+
                     response = client.chat.completions.create(
-                        model="gpt-4.1",
-                        messages=[
-                            {"role": "system", "content": system_prompt},
-                            {"role": "user", "content": user_input}
-                        ],
-                        temperature=0.1,
-                        max_tokens=1500
+                        model="gpt-6-luna",
+                        messages= messages,
+                        #temperature=0.1,
+                        max_completion_tokens=1500
                     )
                     
                     reply = response.choices[0].message.content
