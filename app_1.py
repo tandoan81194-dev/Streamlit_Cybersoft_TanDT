@@ -231,12 +231,3 @@ else:
         - What's the average value by month?
         - Are there any outliers in the price column?
         """)
-
-# Footer with tips
-st.markdown("---")
-st.markdown("""
-<div style='text-align: center; color: gray; font-size: 12px;'>
-💡 Tip: Be specific with your questions for better results | 
-🔒 Your data stays private and is not stored
-</div>
-""", unsafe_allow_html=True)
